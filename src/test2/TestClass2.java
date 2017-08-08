@@ -14,6 +14,10 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.google.common.base.Function;
 
 import org.openqa.selenium.By;
@@ -28,6 +32,23 @@ public class TestClass2
 	//Wait<WebDriver> wait;
 	
 	
+	private ExtentReports report;
+	private ExtentTest test;
+	private String reportFilePath = "test.html";
+	
+	public void setUp()
+	{
+		report = new ExtentReports();
+		ExtentHtmlReporter extentHtmlReporter = new ExtentHtmlReporter(reportFilePath);
+		extentHtmlReporter.config().setChartVisibilityOnOpen(true);
+		extentHtmlReporter.config().setReportName("ReportName");
+        extentHtmlReporter.config().setDocumentTitle("DocumentTitle");
+      // extentHtmlReporter.config().setTheme(reportDetails.getTheme());
+        report.attachReporter(extentHtmlReporter);
+        test = report.createTest("TestName");
+      // return extentHtmlReporter;
+	}
+	
 	@BeforeClass
 	public static void beforeClass()
 	{
@@ -40,7 +61,7 @@ public class TestClass2
 		System.out.println("before");
 		loginPage = PageFactory.initElements(webDriver, LoginPage.class);
 		loginActual = PageFactory.initElements(webDriver, LoginActual.class);
-		
+		setUp();
 		// wait = new FluentWait<WebDriver>(webDriver);
 	}
 	
@@ -62,7 +83,10 @@ public class TestClass2
 		loginActual.inputPassword("12345");
 		loginActual.submit();
 		
+		test.log(Status.INFO, "info level");
+		test.fail("failed");
 		
+		//webDriver.quit();
 		
 		
 	}
@@ -71,6 +95,7 @@ public class TestClass2
 	public void after()
 	{
 		System.out.println("after");	
+		report.flush();
 	}
 	
 	@AfterClass
