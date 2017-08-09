@@ -1,7 +1,13 @@
 package test2;
 
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -22,6 +28,8 @@ import com.google.common.base.Function;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 
 public class TestClass2 
 {
@@ -35,6 +43,11 @@ public class TestClass2
 	private ExtentReports report;
 	private ExtentTest test;
 	private String reportFilePath = "test.html";
+	
+	private SpreadSheetReader reader1;
+	//private SpreadSheetExample example1;
+	
+	ArrayList<String> spreadData = new ArrayList<String>();
 	
 	public void setUp()
 	{
@@ -63,6 +76,9 @@ public class TestClass2
 		loginActual = PageFactory.initElements(webDriver, LoginActual.class);
 		setUp();
 		// wait = new FluentWait<WebDriver>(webDriver);
+		
+		reader1 = new SpreadSheetReader("C:\\Users\\Administrator\\workspace\\test2\\spread1.xlsx");
+		//example1 = new SpreadSheetExample();
 	}
 	
 	@Test
@@ -83,10 +99,25 @@ public class TestClass2
 		loginActual.inputPassword("12345");
 		loginActual.submit();
 		
-		test.log(Status.INFO, "info level");
-		test.fail("failed");
+		assertEquals("**Successful Login**", loginActual.check());
 		
-		//webDriver.quit();
+		take(webDriver, "screen1");
+		
+		test.log(Status.PASS, "info level");
+		test.pass("Successful Login test performed");
+					
+		
+		spreadData.addAll(reader1.readRow(0, "Input Data")); 
+		spreadData.addAll(reader1.readRow(1, "Input Data")); 
+		
+		for(String x : spreadData)
+		{
+			System.out.println(x);
+		}
+		
+		
+		webDriver.quit();
+		
 		
 		
 	}
@@ -112,6 +143,7 @@ public class TestClass2
 				.pollingEvery(5, TimeUnit.SECONDS)
 				.ignoring(NoSuchElementException.class);
 		
+		@SuppressWarnings("unused")
 		WebElement foo = wait.until (new Function<WebDriver, WebElement>()    //
 				{
 					public WebElement apply(WebDriver driver)
@@ -124,6 +156,25 @@ public class TestClass2
 		
 	}
 	
+	public static String take(WebDriver webDriver, String fileName)  
+	 {
+		 try
+		 {
+			 
+	        File scrFile = ((TakesScreenshot)webDriver).getScreenshotAs(OutputType.FILE);
+	        String pathname = System.getProperty("user.dir") + File.separatorChar + fileName +".jpg";
+	        FileUtils.copyFile(scrFile, new File(pathname));
+	        
+	        System.out.println("File Saved at: " + pathname);
+	        return pathname;
+		 }
+		 
+		 catch(IOException ioe)
+		 {
+			ioe.printStackTrace();
+		 }
+		 return "";
+	 }
 	
 	
 	

@@ -15,6 +15,9 @@ public class LoginActual
 	@FindBy (css= " input[type=\"button\"]")
 	private WebElement submit;
 	
+	@FindBy(css= " body > table > tbody > tr > td.auto-style1 > big > blockquote > blockquote > font > center > b")
+	private WebElement successfulLogin;
+	
 	
 	public void inputUsername(String username)
 	{
@@ -29,6 +32,11 @@ public class LoginActual
 	public void submit()
 	{
 		submit.click();
+	}
+	
+	public String check()
+	{
+		return successfulLogin.getText();
 	}
 	
 	
