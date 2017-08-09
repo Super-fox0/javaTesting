@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
@@ -36,6 +37,10 @@ public class TestClass2
 	private LoginPage loginPage;
 	private LoginActual loginActual;
 	private WebDriver webDriver = new ChromeDriver();
+	
+	private MouseStuff mouse;
+	
+	Actions builder = new Actions(webDriver);
 	
 	//Wait<WebDriver> wait;
 	
@@ -74,6 +79,7 @@ public class TestClass2
 		System.out.println("before");
 		loginPage = PageFactory.initElements(webDriver, LoginPage.class);
 		loginActual = PageFactory.initElements(webDriver, LoginActual.class);
+		mouse = PageFactory.initElements(webDriver,MouseStuff.class);
 		setUp();
 		// wait = new FluentWait<WebDriver>(webDriver);
 		
@@ -84,44 +90,57 @@ public class TestClass2
 	@Test
 	public void test()
 	{
-		System.out.println("test");		
-		
-		webDriver.navigate().to("http://thedemosite.co.uk");
-		loginPage.gotoPage();
-		loginPage.enterUsername("abcde");
-		loginPage.enterPassword("12345");
-		wait1("input[type=\"button\"]");
-		loginPage.submit();
-		
-		loginPage.changePage();
-		
-		loginActual.inputUsername("abcde");
-		loginActual.inputPassword("12345");
-		loginActual.submit();
-		
-		assertEquals("**Successful Login**", loginActual.check());
-		
-		take(webDriver, "screen1");
-		
-		test.log(Status.PASS, "info level");
-		test.pass("Successful Login test performed");
-					
-		
-		spreadData.addAll(reader1.readRow(0, "Input Data")); //causes a repeat
-		spreadData.addAll(reader1.readRow(1, "Input Data")); 
-		
-		for(String x : spreadData)
-		{
-			System.out.println(x);
-		}
-		
-		
-		webDriver.quit();
-		
-		
-		
+//		System.out.println("test");		
+//		
+//		webDriver.navigate().to("http://thedemosite.co.uk");
+//		loginPage.gotoPage();
+//		loginPage.enterUsername("abcde");
+//		loginPage.enterPassword("12345");
+//		wait1("input[type=\"button\"]");
+//		loginPage.submit();
+//		
+//		loginPage.changePage();
+//		
+//		loginActual.inputUsername("abcde");
+//		loginActual.inputPassword("12345");
+//		loginActual.submit();
+//		
+//		assertEquals("**Successful Login**", loginActual.check());
+//		
+//		take(webDriver, "screen1");
+//		
+//		test.log(Status.PASS, "info level");
+//		test.pass("Successful Login test performed");
+//					
+//		
+//		spreadData.addAll(reader1.readRow(0, "Input Data")); //causes a repeat
+//		
+//		spreadData.addAll(reader1.readRow(1, "Input Data")); 
+//		
+//		for(String x : spreadData)
+//		{
+//			System.out.println(x);
+//		}
+//		
+//		
+//		webDriver.quit();				
 	}
 	
+	
+	@Test
+	public void test2()
+	{	
+		webDriver.navigate().to("http://demoqa.com/");
+		wait1("#menu-item-151 > a");
+		mouse.clickSortable();
+		mouse.gridFormat();
+		//wait1("#sortable_grid > li:nth-child(1)");
+		builder.moveToElement(mouse.tile1);
+		builder.dragAndDropBy(mouse.tile1, 400, 400);
+		
+		//webDriver.quit();
+	}
+		
 	@After
 	public void after()
 	{
@@ -176,10 +195,9 @@ public class TestClass2
 		 return "";
 	 }
 	
+
 	
 	
 	
-	
-	
-	
+
 }
