@@ -107,7 +107,7 @@ public class TestClass2
 		test.pass("Successful Login test performed");
 					
 		
-		spreadData.addAll(reader1.readRow(0, "Input Data")); 
+		spreadData.addAll(reader1.readRow(0, "Input Data")); //causes a repeat
 		spreadData.addAll(reader1.readRow(1, "Input Data")); 
 		
 		for(String x : spreadData)
