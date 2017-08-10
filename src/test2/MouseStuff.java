@@ -8,24 +8,26 @@ public class MouseStuff
 	
 	
 
-	@FindBy (css= "#menu-item-151 > a")
-	private WebElement sortableButton;
+	@FindBy (css= "#menu-item-140 > a")
+	private WebElement dragButton;
 	
-	@FindBy (id = "ui-id-3")
-	private WebElement displayGrid;
+//	@FindBy (id = "ui-id-3")
+//	private WebElement displayGrid;
 	
-	@FindBy (css= "#sortable_grid > li:nth-child(1)")
-	public WebElement tile1;	
+	@FindBy (id= "draggable")
+	public WebElement dragThing;	
 
-	public void clickSortable()
+	public void clickDrag()
 	{
-		sortableButton.click();
+		dragButton.click();
 	}
 	
-	public void gridFormat()
+	public WebElement giveElement()
 	{
-		displayGrid.click();
+		return dragButton;
 	}
+	
+	
 	
 	
 }

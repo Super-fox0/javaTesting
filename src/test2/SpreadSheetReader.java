@@ -17,7 +17,7 @@ public class SpreadSheetReader
 {
 
 	private Workbook workbook;
-	List<String> row = new ArrayList<String>();
+//	List<String> row = new ArrayList<String>();
 	
 	
 	public SpreadSheetReader(String fileName)
@@ -36,7 +36,7 @@ public class SpreadSheetReader
 	
 	public List<String> readRow(int rowNo, String sheetName)
 	{
-       
+		List<String> row = new ArrayList<String>();
         Sheet datatypeSheet = workbook.getSheet(sheetName);
         Row currentRow =   datatypeSheet.getRow(rowNo);
         

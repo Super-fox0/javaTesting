@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -30,6 +31,7 @@ import com.google.common.base.Function;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
 
 public class TestClass2 
@@ -39,38 +41,37 @@ public class TestClass2
 	private WebDriver webDriver = new ChromeDriver();
 	
 	private MouseStuff mouse;
-	
 	Actions builder = new Actions(webDriver);
 	
-	//Wait<WebDriver> wait;
-	
-	
-	private ExtentReports report;
+	private static ExtentReports report;
 	private ExtentTest test;
-	private String reportFilePath = "test.html";
+	private static String reportFilePath = "test.html";
 	
-	private SpreadSheetReader reader1;
-	//private SpreadSheetExample example1;
-	
+	private static SpreadSheetReader reader1;
 	ArrayList<String> spreadData = new ArrayList<String>();
 	
-	public void setUp()
+	private String nameBuilder= "Java Test ";
+	private int testNo = 1;
+	
+	@BeforeClass
+	public static void setUp()
 	{
 		report = new ExtentReports();
 		ExtentHtmlReporter extentHtmlReporter = new ExtentHtmlReporter(reportFilePath);
 		extentHtmlReporter.config().setChartVisibilityOnOpen(true);
 		extentHtmlReporter.config().setReportName("ReportName");
         extentHtmlReporter.config().setDocumentTitle("DocumentTitle");
-      // extentHtmlReporter.config().setTheme(reportDetails.getTheme());
+        
         report.attachReporter(extentHtmlReporter);
-        test = report.createTest("TestName");
-      // return extentHtmlReporter;
+       
+        reader1 = new SpreadSheetReader("C:\\Users\\Administrator\\workspace\\test2\\spread1.xlsx");
 	}
 	
 	@BeforeClass
 	public static void beforeClass()
 	{
 		System.out.println("before class");
+		
 	}
 	
 	@Before
@@ -80,69 +81,77 @@ public class TestClass2
 		loginPage = PageFactory.initElements(webDriver, LoginPage.class);
 		loginActual = PageFactory.initElements(webDriver, LoginActual.class);
 		mouse = PageFactory.initElements(webDriver,MouseStuff.class);
-		setUp();
-		// wait = new FluentWait<WebDriver>(webDriver);
 		
-		reader1 = new SpreadSheetReader("C:\\Users\\Administrator\\workspace\\test2\\spread1.xlsx");
-		//example1 = new SpreadSheetExample();
+		test = report.createTest(nameBuilder + testNo);
+		testNo++;
 	}
 	
-	@Test
+	@Ignore
 	public void test()
 	{
-//		System.out.println("test");		
-//		
-//		webDriver.navigate().to("http://thedemosite.co.uk");
-//		loginPage.gotoPage();
-//		loginPage.enterUsername("abcde");
-//		loginPage.enterPassword("12345");
-//		wait1("input[type=\"button\"]");
-//		loginPage.submit();
-//		
-//		loginPage.changePage();
-//		
-//		loginActual.inputUsername("abcde");
-//		loginActual.inputPassword("12345");
-//		loginActual.submit();
-//		
-//		assertEquals("**Successful Login**", loginActual.check());
-//		
-//		take(webDriver, "screen1");
-//		
-//		test.log(Status.PASS, "info level");
-//		test.pass("Successful Login test performed");
-//					
-//		
-//		spreadData.addAll(reader1.readRow(0, "Input Data")); //causes a repeat
-//		
-//		spreadData.addAll(reader1.readRow(1, "Input Data")); 
-//		
-//		for(String x : spreadData)
-//		{
-//			System.out.println(x);
-//		}
-//		
-//		
-//		webDriver.quit();				
+		System.out.println("test");		
+		
+		webDriver.navigate().to("http://thedemosite.co.uk");
+		loginPage.gotoPage();
+		loginPage.enterUsername("abcde");
+		loginPage.enterPassword("12345");
+		wait1("input[type=\"button\"]");
+		loginPage.submit();
+		loginPage.changePage();
+		
+		loginActual.inputUsername("abcde");
+		loginActual.inputPassword("12345");
+		loginActual.submit();
+		
+		assertEquals("**Successful Login**", loginActual.check());
+		take(webDriver, "screen1");
+		test.log(Status.INFO, "Login Test");
+		test.pass("Successful Login test performed");
+		webDriver.close();				
 	}
 	
 	
-	@Test
+	@Ignore
 	public void test2()
 	{	
 		webDriver.navigate().to("http://demoqa.com/");
 		wait1("#menu-item-151 > a");
-		mouse.clickSortable();
-		mouse.gridFormat();
-		//wait1("#sortable_grid > li:nth-child(1)");
-		builder.moveToElement(mouse.tile1);
-		builder.dragAndDropBy(mouse.tile1, 400, 400);
+		mouse.clickDrag();	
 		
-		//webDriver.quit();
+		Point p = mouse.dragThing.getLocation(); 
+		System.out.println(p.getX() + " " + p.getY());
+		int xStart = p.getX();
+		
+		builder.dragAndDropBy(mouse.dragThing, 200, 200).perform();	
+		p = mouse.dragThing.getLocation(); 
+		System.out.println(p.getX() + " " + p.getY());
+		int xFinish = p.getX();
+		
+		take(webDriver, "screen2");
+		assertFalse(xStart == xFinish);
+		test.log(Status.INFO, "Drag Test");
+		test.pass("Successful Drag Test Performed");
+		webDriver.close();
+	}
+	
+	@Test
+	public void test3()
+	{
+
+		spreadData.addAll(reader1.readRow(0, "Input Data")); 
+		spreadData.addAll(reader1.readRow(1, "Input Data")); 	
+		for(String x : spreadData)
+		{
+			System.out.println(x);
+		}
+		
+		test.log(Status.INFO, "Spreadsheet Test");
+		test.pass("Successful Spreadsheet test performed");
 	}
 		
 	@After
 	public void after()
+
 	{
 		System.out.println("after");	
 		report.flush();
