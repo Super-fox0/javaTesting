@@ -28,6 +28,18 @@ public class MouseStuff
 	}
 	
 	
+	@FindBy (css = "#menu-item-151 > a")
+	public WebElement sortableButton;
+	
+	@FindBy (xpath = "//*[@id=\"sortable\"]/li[2]")
+	public WebElement item1;
+	
+	public void clickSortButton()
+	{
+		sortableButton.click();
+	}
+	
+	
 	
 	
 }

@@ -149,7 +149,26 @@ public class TestClass2
 		test.log(Status.INFO, "Spreadsheet Test");
 		test.pass("Successful Spreadsheet test performed");
 	}
+	
+	@Test
+	public void test4() throws IOException
+	{	
+		webDriver.navigate().to("http://demoqa.com/");
+		wait1("#menu-item-151 > a");
+		mouse.clickSortButton();	
 		
+
+		builder.dragAndDropBy(mouse.item1, 0, 50).perform();	
+
+
+		
+		take(webDriver, "screen3");
+		test.log(Status.INFO, "Drag Test");
+		test.pass("Successful Drag Test Performed");
+		test.addScreenCaptureFromPath("C:\\Users\\Administrator\\workspace\\test2\\screen3.jpg");
+		webDriver.close();
+	}
+	
 	@After
 	public void after()
 
