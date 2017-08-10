@@ -51,7 +51,7 @@ public class TestClass2
 	ArrayList<String> spreadData = new ArrayList<String>();
 	
 	private String nameBuilder= "Java Test ";
-	private int testNo = 1;
+	private static int testNo = 1;
 	
 	@BeforeClass
 	public static void setUp()
@@ -70,8 +70,7 @@ public class TestClass2
 	@BeforeClass
 	public static void beforeClass()
 	{
-		System.out.println("before class");
-		
+		System.out.println("before class");	
 	}
 	
 	@Before
@@ -82,12 +81,13 @@ public class TestClass2
 		loginActual = PageFactory.initElements(webDriver, LoginActual.class);
 		mouse = PageFactory.initElements(webDriver,MouseStuff.class);
 		
-		test = report.createTest(nameBuilder + testNo);
+		test = report.createTest(nameBuilder + testNo); // doesn't update
 		testNo++;
+		//System.out.println(testNo);
 	}
 	
-	@Ignore
-	public void test()
+	@Test
+	public void test() throws IOException
 	{
 		System.out.println("test");		
 		
@@ -107,12 +107,13 @@ public class TestClass2
 		take(webDriver, "screen1");
 		test.log(Status.INFO, "Login Test");
 		test.pass("Successful Login test performed");
+		test.addScreenCaptureFromPath("C:\\Users\\Administrator\\workspace\\test2\\screen1.jpg");
+		
 		webDriver.close();				
 	}
 	
-	
-	@Ignore
-	public void test2()
+	@Test
+	public void test2() throws IOException
 	{	
 		webDriver.navigate().to("http://demoqa.com/");
 		wait1("#menu-item-151 > a");
@@ -131,20 +132,19 @@ public class TestClass2
 		assertFalse(xStart == xFinish);
 		test.log(Status.INFO, "Drag Test");
 		test.pass("Successful Drag Test Performed");
+		test.addScreenCaptureFromPath("C:\\Users\\Administrator\\workspace\\test2\\screen2.jpg");
 		webDriver.close();
 	}
 	
 	@Test
 	public void test3()
 	{
-
 		spreadData.addAll(reader1.readRow(0, "Input Data")); 
 		spreadData.addAll(reader1.readRow(1, "Input Data")); 	
 		for(String x : spreadData)
 		{
 			System.out.println(x);
 		}
-		
 		test.log(Status.INFO, "Spreadsheet Test");
 		test.pass("Successful Spreadsheet test performed");
 	}
