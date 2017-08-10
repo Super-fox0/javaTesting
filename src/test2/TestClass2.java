@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -39,6 +40,7 @@ public class TestClass2
 	private LoginPage loginPage;
 	private LoginActual loginActual;
 	private WebDriver webDriver = new ChromeDriver();
+	//private WebDriver webDriver = new FirefoxDriver();
 	
 	private MouseStuff mouse;
 	Actions builder = new Actions(webDriver);
@@ -81,9 +83,8 @@ public class TestClass2
 		loginActual = PageFactory.initElements(webDriver, LoginActual.class);
 		mouse = PageFactory.initElements(webDriver,MouseStuff.class);
 		
-		test = report.createTest(nameBuilder + testNo); // doesn't update
+		test = report.createTest(nameBuilder + testNo);
 		testNo++;
-		//System.out.println(testNo);
 	}
 	
 	@Test
